@@ -83,13 +83,13 @@
       100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
     }
 
-    /* ===== Overlay cảnh báo xoay dọc ===== */
+    /* Overlay cảnh báo xoay dọc */
     #rotateNotice {
       position: fixed;
       top:0; left:0;
       width:100vw; height:100vh;
       background:#fff; color:#333;
-      display:none; /* mặc định ẩn */
+      display:none;
       justify-content:center;
       align-items:center;
       font-size:6vw; text-align:center;
@@ -97,18 +97,16 @@
       flex-direction: column;
     }
 
-    /* ===== CSS xoay ngang trên mobile ===== */
-    @media screen and (max-width: 768px) {
-      body {
-        transform: rotate(90deg);
-        transform-origin: top left;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vh;
-        height: 100vw;
-        overflow: hidden;
-      }
+    /* Xoay ngang trên mobile */
+    body.landscape {
+      transform: rotate(90deg);
+      transform-origin: top left;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vh;
+      height: 100vw;
+      overflow: hidden;
     }
   </style>
 </head>
@@ -138,9 +136,9 @@
   <script>
     const audio = document.getElementById("bgm");
 
-    // Bật nhạc trên desktop và mobile khi người dùng tương tác lần đầu
+    // Bật nhạc sau click/touch đầu tiên trên mọi thiết bị
     const startMusic = () => {
-      audio.play().catch(() => console.log("Nhạc bị chặn tự động, cần tương tác"));
+      audio.play().catch(() => console.log("Nhạc bị chặn, cần tương tác người dùng"));
       document.removeEventListener("click", startMusic);
       document.removeEventListener("touchstart", startMusic);
     };
@@ -159,15 +157,20 @@
     }
     setInterval(createHeart, 500);
 
-    // Kiểm tra xoay ngang/dọc trên mọi điện thoại
+    // Kiểm tra xoay ngang/dọc trên mọi thiết bị
     function checkOrientation() {
       const notice = document.getElementById("rotateNotice");
       if(window.innerHeight > window.innerWidth){
+        // Dọc → hiển thị overlay
         notice.style.display = "flex";
+        document.body.classList.remove("landscape");
       } else {
+        // Ngang → ẩn overlay, áp dụng xoay ngang
         notice.style.display = "none";
+        document.body.classList.add("landscape");
       }
     }
+
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("load", checkOrientation);
   </script>
