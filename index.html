@@ -76,6 +76,7 @@
       color: #ff4d6d;
       font-size: 8vw;
       animation: floatUp 6s linear infinite;
+      pointer-events: none;
     }
 
     @keyframes floatUp {
@@ -88,25 +89,29 @@
       position: fixed;
       top:0; left:0;
       width:100vw; height:100vh;
-      background:#fff; color:#333;
+      background:#fff;
+      color:#333;
       display:none;
       justify-content:center;
       align-items:center;
-      font-size:6vw; text-align:center;
+      font-size:6vw;
+      text-align:center;
       z-index:9999;
       flex-direction: column;
+      padding: 2rem;
+      box-sizing: border-box;
     }
 
-    /* Xoay ngang trên mobile */
-    body.landscape {
-      transform: rotate(90deg);
-      transform-origin: top left;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vh;
-      height: 100vw;
-      overflow: hidden;
+    #rotateNotice span {
+      font-size: 10vw;
+      margin-bottom: 1rem;
+    }
+
+    /* Khi cầm dọc thì luôn hiện overlay */
+    @media (orientation: portrait) {
+      #rotateNotice {
+        display:flex;
+      }
     }
   </style>
 </head>
@@ -115,7 +120,8 @@
 
   <!-- Overlay cảnh báo dọc -->
   <div id="rotateNotice">
-    📱 Vui lòng xoay điện thoại sang ngang để xem trang! 📱
+    <span>📱</span>
+    <div>Vui lòng xoay điện thoại sang ngang để xem trang! 📱</div>
   </div>
 
   <h1>💐 Chúc mừng Ngày Nhà giáo Việt Nam 20/11 💐</h1>
@@ -129,23 +135,64 @@
   </div>
 
   <!-- Nhạc nền -->
-  <audio id="bgm" loop>
+  <audio id="bgm" loop preload="auto" playsinline>
     <source src="gieo.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    const audio = document.getElementById("bgm");
+    const audio  = document.getElementById("bgm");
+    const notice = document.getElementById("rotateNotice");
 
-    // Bật nhạc sau click/touch đầu tiên trên mọi thiết bị
-    const startMusic = () => {
-      audio.play().catch(() => console.log("Nhạc bị chặn, cần tương tác người dùng"));
-      document.removeEventListener("click", startMusic);
-      document.removeEventListener("touchstart", startMusic);
-    };
-    document.addEventListener("click", startMusic);
-    document.addEventListener("touchstart", startMusic);
+    // ========== BẬT NHẠC ==========
+    function tryPlay() {
+      audio.play().then(() => {
+        const btn = document.getElementById("enableSoundBtn");
+        if (btn) btn.remove();
+      }).catch(() => {
+        ensureEnableButton();
+      });
+    }
 
-    // Tạo tim nổi
+    function ensureEnableButton() {
+      if (document.getElementById("enableSoundBtn")) return;
+      const btn = document.createElement("button");
+      btn.id = "enableSoundBtn";
+      btn.textContent = "Bấm để bật nhạc 🎵";
+      Object.assign(btn.style, {
+        position: "fixed",
+        left: "50%",
+        transform: "translateX(-50%)",
+        bottom: "2rem",
+        padding: "0.8rem 1.4rem",
+        fontSize: "1rem",
+        borderRadius: "12px",
+        border: "none",
+        background: "#ff7f50",
+        color: "#fff",
+        boxShadow: "0 4px 12px rgba(0,0,0,.2)",
+        zIndex: 10000
+      });
+      btn.onclick = tryPlay;
+      document.body.appendChild(btn);
+    }
+
+    // Thử phát khi có tương tác bất kỳ
+    ["click", "touchstart", "scroll", "keydown"].forEach(evt =>
+      document.addEventListener(evt, tryPlay, { once: true })
+    );
+
+    // Khi quay lại tab
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) tryPlay();
+    });
+
+    // Lỗi tải file mp3
+    audio.addEventListener("error", () => {
+      console.log("Không tải được gieo.mp3 – kiểm tra đường dẫn/tên tệp.");
+      ensureEnableButton();
+    });
+
+    // ========== TIM BAY ==========
     function createHeart() {
       const heart = document.createElement("div");
       heart.classList.add("floating-heart");
@@ -157,22 +204,20 @@
     }
     setInterval(createHeart, 500);
 
-    // Kiểm tra xoay ngang/dọc trên mọi thiết bị
-    function checkOrientation() {
-      const notice = document.getElementById("rotateNotice");
-      if(window.innerHeight > window.innerWidth){
-        // Dọc → hiển thị overlay
+    // ========== CẬP NHẬT THÔNG BÁO XOAY (cho trình duyệt cũ) ==========
+    function applyOrientationNotice() {
+      // Nếu trình duyệt không hỗ trợ @media orientation thì ta tự xử lý
+      const isPortrait = window.innerHeight > window.innerWidth;
+      if (isPortrait) {
         notice.style.display = "flex";
-        document.body.classList.remove("landscape");
       } else {
-        // Ngang → ẩn overlay, áp dụng xoay ngang
         notice.style.display = "none";
-        document.body.classList.add("landscape");
       }
     }
 
-    window.addEventListener("resize", checkOrientation);
-    window.addEventListener("load", checkOrientation);
+    window.addEventListener("load", applyOrientationNotice);
+    window.addEventListener("resize", applyOrientationNotice);
+    window.addEventListener("orientationchange", applyOrientationNotice);
   </script>
 
 </body>
