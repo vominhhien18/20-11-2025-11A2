@@ -13,49 +13,52 @@
       height: 100%;
       width: 100%;
       overflow-x: hidden;
-      overflow-y: auto;
     }
 
     body {
       background: linear-gradient(135deg, #ffecd2, #fcb69f);
       text-align: center;
-      padding: 60px;
+      padding: 2vw;
     }
 
     h1 {
-      font-size: 60px;
+      font-size: 5vw;
       color: #b30000;
       animation: fadeIn 2s ease-in-out;
-      margin-bottom: 10px;
+      margin-bottom: 1vh;
     }
 
     h2 {
-      font-size: 40px;
+      font-size: 3vw;
       color: #333;
-      margin-top: -10px;
+      margin-top: -0.5vh;
       animation: fadeIn 2.5s ease-in-out;
     }
 
     .class-img {
-      width: 45%;
+      width: 60vw;
       max-width: 500px;
-      margin-top: 25px;
+      margin-top: 2vh;
       border-radius: 20px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.3);
       animation: fadeIn 2s ease-in-out;
     }
 
     .card {
-      margin: 45px auto;
-      padding: 30px;
-      width: 60%;
+      margin: 3vh auto;
+      padding: 3vw;
+      width: 80vw;
+      max-width: 600px;
       background: white;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       animation: slideUp 1.5s ease;
     }
 
-    p { font-size: 26px; }
+    p {
+      font-size: 3vw;
+      margin: 1vh 0;
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -71,13 +74,13 @@
       position: fixed;
       bottom: -50px;
       color: #ff4d6d;
-      font-size: 60px;
+      font-size: 8vw;
       animation: floatUp 6s linear infinite;
     }
 
     @keyframes floatUp {
       0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
+      100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
     }
 
     /* ===== Overlay cảnh báo xoay dọc ===== */
@@ -89,12 +92,12 @@
       display:none; /* mặc định ẩn */
       justify-content:center;
       align-items:center;
-      font-size:24px; text-align:center;
+      font-size:6vw; text-align:center;
       z-index:9999;
       flex-direction: column;
     }
 
-    /* ===== Xoay ngang trên mobile ===== */
+    /* ===== CSS xoay ngang trên mobile ===== */
     @media screen and (max-width: 768px) {
       body {
         transform: rotate(90deg);
@@ -127,20 +130,24 @@
     <p>Cảm ơn thầy cô đã dìu dắt và truyền cảm hứng cho chúng em mỗi ngày!</p>
   </div>
 
+  <!-- Nhạc nền chỉ phát trên desktop -->
   <audio id="bgm" autoplay loop hidden>
     <source src="gieo.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // Nhạc nền click/touch để auto play
     const audio = document.getElementById("bgm");
-    const startMusic = () => {
-      audio.play();
-      document.removeEventListener("click", startMusic);
-      document.removeEventListener("touchstart", startMusic);
-    };
-    document.addEventListener("click", startMusic);
-    document.addEventListener("touchstart", startMusic);
+
+    // Nếu màn hình > 768px (desktop) mới bật nhạc
+    if(window.innerWidth > 768){
+      const startMusic = () => {
+        audio.play();
+        document.removeEventListener("click", startMusic);
+        document.removeEventListener("touchstart", startMusic);
+      };
+      document.addEventListener("click", startMusic);
+      document.addEventListener("touchstart", startMusic);
+    }
 
     // Tạo tim nổi
     function createHeart() {
@@ -157,13 +164,14 @@
     // Kiểm tra xoay ngang/dọc trên mobile
     function checkOrientation() {
       const notice = document.getElementById("rotateNotice");
-      // Nếu điện thoại đang dọc (chiều cao > chiều rộng)
-      if(window.innerWidth < 768 && window.innerHeight > window.innerWidth){
+      // Mobile dọc (chiều cao > chiều rộng) mới hiển thị cảnh báo
+      if(window.innerWidth <= 768 && window.innerHeight > window.innerWidth){
         notice.style.display = "flex";
       } else {
         notice.style.display = "none";
       }
     }
+
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("load", checkOrientation);
   </script>
