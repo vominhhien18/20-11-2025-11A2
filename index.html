@@ -80,18 +80,21 @@
       100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
     }
 
-    /* ===== Overlay cảnh báo xoay dọc trên mobile ===== */
+    /* ===== Overlay cảnh báo xoay dọc ===== */
     #rotateNotice {
-      position: fixed; top:0; left:0;
+      position: fixed;
+      top:0; left:0;
       width:100vw; height:100vh;
       background:#fff; color:#333;
-      display:none;
-      justify-content:center; align-items:center;
-      font-size:24px; text-align:center; z-index:9999;
+      display:none; /* mặc định ẩn */
+      justify-content:center;
+      align-items:center;
+      font-size:24px; text-align:center;
+      z-index:9999;
       flex-direction: column;
     }
 
-    /* ===== CSS xoay ngang trên mobile ===== */
+    /* ===== Xoay ngang trên mobile ===== */
     @media screen and (max-width: 768px) {
       body {
         transform: rotate(90deg);
@@ -109,7 +112,7 @@
 
 <body>
 
-  <!-- Overlay cảnh báo xoay dọc -->
+  <!-- Overlay cảnh báo dọc -->
   <div id="rotateNotice">
     📱 Vui lòng xoay điện thoại sang ngang để xem trang! 📱
   </div>
@@ -154,8 +157,8 @@
     // Kiểm tra xoay ngang/dọc trên mobile
     function checkOrientation() {
       const notice = document.getElementById("rotateNotice");
-      if(window.innerWidth <= 768 && window.innerWidth < window.innerHeight){
-        // Mobile dọc
+      // Nếu điện thoại đang dọc (chiều cao > chiều rộng)
+      if(window.innerWidth < 768 && window.innerHeight > window.innerWidth){
         notice.style.display = "flex";
       } else {
         notice.style.display = "none";
