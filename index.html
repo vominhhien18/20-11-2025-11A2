@@ -92,7 +92,16 @@
   <audio autoplay loop hidden>
     <source src="gieo.mp3" type="audio/mpeg">
   </audio>
-
+<script>
+  const audio = document.getElementById("bgm");
+  const startMusic = () => {
+    audio.play();
+    document.removeEventListener("click", startMusic);
+    document.removeEventListener("touchstart", startMusic);
+  };
+  document.addEventListener("click", startMusic);
+  document.addEventListener("touchstart", startMusic);
+</script>
   <script>
     function createHeart() {
       const heart = document.createElement("div");
@@ -108,3 +117,4 @@
 
 </body>
 </html>
+
