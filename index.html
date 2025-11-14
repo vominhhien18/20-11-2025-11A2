@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chúc mừng 20/11</title>
+
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      text-align: center;
+      padding: 60px;
+    }
+
+    h1 {
+      font-size: 60px;
+      color: #b30000;
+      animation: fadeIn 2s ease-in-out;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 40px;
+      color: #333;
+      margin-top: -10px;
+      animation: fadeIn 2.5s ease-in-out;
+    }
+
+    .class-img {
+      width: 45%;
+      max-width: 500px;
+      margin-top: 25px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .card {
+      margin: 45px auto;
+      padding: 30px;
+      width: 60%;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      animation: slideUp 1.5s ease;
+    }
+	p {
+  	font-size: 26px;
+    }
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .floating-heart {
+      position: fixed;
+      bottom: -50px;
+      color: #ff4d6d;
+      font-size: 60px;
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>💐 Chúc mừng Ngày Nhà giáo Việt Nam 20/11 💐</h1>
+  <h2>Trường THPT Nguyễn Quang Diêu – 11A2</h2>
+
+  <!-- Ảnh lớp -->
+  <img src="anhlop.jpg" class="class-img" alt="Ảnh lớp 11A2">
+
+  <div class="card">
+    <p>Kính chúc thầy cô luôn mạnh khỏe, hạnh phúc và thành công.</p>
+    <p>Cảm ơn thầy cô đã dìu dắt và truyền cảm hứng cho chúng em mỗi ngày!</p>
+  </div>
+
+  <!-- Nhạc nền -->
+  <audio autoplay loop hidden>
+    <source src="gieo.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("floating-heart");
+      heart.textContent = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 4 + Math.random() * 4 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+    setInterval(createHeart, 500);
+  </script>
+
+</body>
+</html>
