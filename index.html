@@ -6,9 +6,17 @@
   <title>Chúc mừng 20/11</title>
 
   <style>
-    /* ===== Body cơ bản ===== */
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
       font-family: "Segoe UI", sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body {
       background: linear-gradient(135deg, #ffecd2, #fcb69f);
       text-align: center;
       padding: 60px;
@@ -47,9 +55,7 @@
       animation: slideUp 1.5s ease;
     }
 
-    p {
-      font-size: 26px;
-    }
+    p { font-size: 26px; }
 
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -74,33 +80,29 @@
       100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
     }
 
-    /* ===== Mobile xoay ngang ===== */
-    @media screen and (max-width: 768px) {
-      html, body {
-        width: 100vh;
-        height: 100vw;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
+    /* ===== Overlay cảnh báo xoay dọc trên mobile ===== */
+    #rotateNotice {
+      position: fixed; top:0; left:0;
+      width:100vw; height:100vh;
+      background:#fff; color:#333;
+      display:none;
+      justify-content:center; align-items:center;
+      font-size:24px; text-align:center; z-index:9999;
+      flex-direction: column;
+    }
 
+    /* ===== CSS xoay ngang trên mobile ===== */
+    @media screen and (max-width: 768px) {
       body {
         transform: rotate(90deg);
         transform-origin: top left;
         position: absolute;
         top: 0;
         left: 0;
+        width: 100vh;
+        height: 100vw;
+        overflow: hidden;
       }
-    }
-
-    /* ===== Overlay cảnh báo xoay dọc ===== */
-    #rotateNotice {
-      position: fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      background:#fff; color:#333;
-      display:flex; justify-content:center; align-items:center;
-      font-size:24px; text-align:center; z-index:9999;
-      flex-direction: column;
     }
   </style>
 </head>
@@ -115,7 +117,6 @@
   <h1>💐 Chúc mừng Ngày Nhà giáo Việt Nam 20/11 💐</h1>
   <h2>Trường THPT Nguyễn Quang Diêu – 11A2</h2>
 
-  <!-- Ảnh lớp -->
   <img src="anhlop.jpg" class="class-img" alt="Ảnh lớp 11A2">
 
   <div class="card">
@@ -123,12 +124,10 @@
     <p>Cảm ơn thầy cô đã dìu dắt và truyền cảm hứng cho chúng em mỗi ngày!</p>
   </div>
 
-  <!-- Nhạc nền -->
   <audio id="bgm" autoplay loop hidden>
     <source src="gieo.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- ===== JavaScript ===== -->
   <script>
     // Nhạc nền click/touch để auto play
     const audio = document.getElementById("bgm");
@@ -152,14 +151,13 @@
     }
     setInterval(createHeart, 500);
 
-    // Kiểm tra xoay ngang/dọc
+    // Kiểm tra xoay ngang/dọc trên mobile
     function checkOrientation() {
       const notice = document.getElementById("rotateNotice");
-      if(window.innerWidth < window.innerHeight) {
-        // Dọc
+      if(window.innerWidth <= 768 && window.innerWidth < window.innerHeight){
+        // Mobile dọc
         notice.style.display = "flex";
       } else {
-        // Ngang
         notice.style.display = "none";
       }
     }
