@@ -130,24 +130,22 @@
     <p>Cảm ơn thầy cô đã dìu dắt và truyền cảm hứng cho chúng em mỗi ngày!</p>
   </div>
 
-  <!-- Nhạc nền chỉ phát trên desktop -->
-  <audio id="bgm" autoplay loop hidden>
+  <!-- Nhạc nền -->
+  <audio id="bgm" loop>
     <source src="gieo.mp3" type="audio/mpeg">
   </audio>
 
   <script>
     const audio = document.getElementById("bgm");
 
-    // Nếu màn hình > 768px (desktop) mới bật nhạc
-    if(window.innerWidth > 768){
-      const startMusic = () => {
-        audio.play();
-        document.removeEventListener("click", startMusic);
-        document.removeEventListener("touchstart", startMusic);
-      };
-      document.addEventListener("click", startMusic);
-      document.addEventListener("touchstart", startMusic);
-    }
+    // Bật nhạc trên desktop và mobile khi người dùng tương tác lần đầu
+    const startMusic = () => {
+      audio.play().catch(() => console.log("Nhạc bị chặn tự động, cần tương tác"));
+      document.removeEventListener("click", startMusic);
+      document.removeEventListener("touchstart", startMusic);
+    };
+    document.addEventListener("click", startMusic);
+    document.addEventListener("touchstart", startMusic);
 
     // Tạo tim nổi
     function createHeart() {
@@ -161,17 +159,15 @@
     }
     setInterval(createHeart, 500);
 
-    // Kiểm tra xoay ngang/dọc trên mobile
+    // Kiểm tra xoay ngang/dọc trên mọi điện thoại
     function checkOrientation() {
       const notice = document.getElementById("rotateNotice");
-      // Mobile dọc (chiều cao > chiều rộng) mới hiển thị cảnh báo
-      if(window.innerWidth <= 768 && window.innerHeight > window.innerWidth){
+      if(window.innerHeight > window.innerWidth){
         notice.style.display = "flex";
       } else {
         notice.style.display = "none";
       }
     }
-
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("load", checkOrientation);
   </script>
