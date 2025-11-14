@@ -6,6 +6,18 @@
   <title>Chúc mừng 20/11</title>
 
   <style>
+@media screen and (max-width: 768px) {
+  body {
+    transform: rotate(90deg);
+    transform-origin: left top;
+    width: 100vh;
+    height: 100vw;
+    overflow-x: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
     body {
       font-family: "Segoe UI", sans-serif;
       background: linear-gradient(135deg, #ffecd2, #fcb69f);
@@ -102,6 +114,7 @@
   document.addEventListener("click", startMusic);
   document.addEventListener("touchstart", startMusic);
 </script>
+
   <script>
     function createHeart() {
       const heart = document.createElement("div");
@@ -117,4 +130,3 @@
 
 </body>
 </html>
-
